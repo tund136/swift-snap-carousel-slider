@@ -32,7 +32,7 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
     var body: some View {
         GeometryReader { proxy in
             
-            // Setting correc Width for Snap Carousel
+            // Setting correct Width for Snap Carousel
             // One Sided Scap Carousel
             let width = proxy.size.width - (trailingSpace - spacing)
             let adjustMentWidth = (trailingSpace / 2) - spacing
@@ -64,6 +64,24 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
                         
                         // Setting min
                         currentIndex = max(min(currentIndex + Int(roundIndex), list.count - 1), 0)
+                        
+                        // Updating index
+                        currentIndex = index
+                    }
+                    .onChanged { value in
+                        // Updating only index
+                        
+                        // Updating current index
+                        let offsetX = value.translation.width
+                        
+                        // Convert the translation into progress (0 - 1) and round the value
+                        // Based on the progress increasing or decreasing the currentIndex
+                        let progress = -offsetX / width
+                        
+                        let roundIndex = progress.rounded()
+                        
+                        // Setting min
+                        index = max(min(currentIndex + Int(roundIndex), list.count - 1), 0)
                     }
             )
         }
