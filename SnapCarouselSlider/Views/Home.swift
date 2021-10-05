@@ -46,6 +46,7 @@ struct Home: View {
                         .cornerRadius(12)
                 }
             }
+            .padding(.vertical, 80)
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {

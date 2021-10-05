@@ -27,9 +27,14 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
     
     var body: some View {
         GeometryReader { proxy in
-            ForEach(list) { item in
-                content(item)
+            HStack(spacing: spacing) {
+                ForEach(list) { item in
+                    content(item)
+                        .frame(width: proxy.size.width - trailingSpace)
+                }
             }
+            // Spacing will be horizontal padding
+            .padding(.horizontal, spacing)
         }
     }
 }
