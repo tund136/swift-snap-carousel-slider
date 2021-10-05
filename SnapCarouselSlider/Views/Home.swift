@@ -47,6 +47,17 @@ struct Home: View {
                 }
             }
             .padding(.vertical, 40)
+            
+            // Indicator
+            HStack(spacing: 10) {
+                ForEach(posts.indices, id: \.self) { index in
+                    Circle()
+                        .fill(Color.black.opacity(currentIndex == index ? 1 : 0.1))
+                        .frame(width: 10, height: 10)
+                        .scaleEffect(currentIndex == index ? 1.4 : 1)
+                        .animation(.spring(), value: currentIndex == index)
+                }
+            }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
