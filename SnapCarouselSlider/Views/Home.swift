@@ -35,7 +35,7 @@ struct Home: View {
             .padding()
             
             // Snap Carousel
-            SnapCarousel(index: $currentIndex, items: posts) { post in
+            SnapCarousel(spacing: 25, index: $currentIndex, items: posts) { post in
                 GeometryReader { proxy in
                     let size = proxy.size
                     
@@ -46,7 +46,7 @@ struct Home: View {
                         .cornerRadius(12)
                 }
             }
-            .padding(.vertical, 80)
+            .padding(.vertical, 40)
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
