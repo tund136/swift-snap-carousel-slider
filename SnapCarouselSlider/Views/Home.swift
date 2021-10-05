@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct Home: View {
+    @State private var currentIndex: Int = 0
+    @State private var posts: [Post] = []
+    
     var body: some View {
         VStack(spacing: 15) {
             VStack(alignment: .leading, spacing: 12) {
@@ -30,8 +33,26 @@ struct Home: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
+            
+            // Snap Carousel
+            SnapCarousel(index: $currentIndex, items: posts) { post in
+                GeometryReader { proxy in
+                    let size = proxy.size
+                    
+                    Image(post.postImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: size.width)
+                        .cornerRadius(12)
+                }
+            }
         }
         .frame(maxHeight: .infinity, alignment: .top)
+        .onAppear {
+            for index in 1...5 {
+                posts.append(Post(postImage: "post\(index)"))
+            }
+        }
     }
 }
 
