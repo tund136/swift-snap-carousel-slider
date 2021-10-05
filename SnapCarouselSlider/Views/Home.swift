@@ -9,7 +9,11 @@ import SwiftUI
 
 struct Home: View {
     @State private var currentIndex: Int = 0
+    
     @State private var posts: [Post] = []
+    
+    @State private var currentTab = "Slide Show"
+    @Namespace var animation
     
     var body: some View {
         VStack(spacing: 15) {
@@ -34,8 +38,17 @@ struct Home: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             
+            // Segment Control
+            HStack {
+                TabButton(title: "Slide Show", animation: animation, currentTab: $currentTab)
+                
+                TabButton(title: "List", animation: animation, currentTab: $currentTab)
+            }
+            .background(Color.black.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal)
+            
             // Snap Carousel
-            SnapCarousel(spacing: 25, index: $currentIndex, items: posts) { post in
+            SnapCarousel(index: $currentIndex, items: posts) { post in
                 GeometryReader { proxy in
                     let size = proxy.size
                     
@@ -58,6 +71,7 @@ struct Home: View {
                         .animation(.spring(), value: currentIndex == index)
                 }
             }
+            .padding(.bottom, 40)
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .onAppear {
