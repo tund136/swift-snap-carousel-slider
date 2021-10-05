@@ -31,6 +31,9 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
     
     var body: some View {
         GeometryReader { proxy in
+            
+            let width = proxy.size.width
+            
             HStack(spacing: spacing) {
                 ForEach(list) { item in
                     content(item)
@@ -39,17 +42,29 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
             }
             // Spacing will be horizontal padding
             .padding(.horizontal, spacing)
-            .offset(x: offset)
+            .offset(x: (CGFloat(currentIndex) * -width) + offset)
             .gesture(
                 DragGesture()
                     .updating($offset, body: { value, out, _ in
                         out = value.translation.width
                     })
                     .onEnded { value in
+                        // Updating current index
+                        let offsetX = value.translation.width
                         
+                        // Convert the translation into progress (0 - 1) and round the value
+                        // Based on the progress increasing or decreasing the currentIndex
+                        let progress = -offsetX / width
+                        
+                        let roundIndex = progress.rounded()
+                        
+                        // Setting min
+                        currentIndex = max(min(currentIndex + Int(roundIndex), list.count - 2), 0)
                     }
             )
         }
+        // Animation when offset = 0
+        .animation(.easeInOut, value: offset == 0)
     }
 }
 
