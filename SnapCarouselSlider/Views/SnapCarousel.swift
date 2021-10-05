@@ -25,6 +25,10 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
         self.content = content
     }
     
+    // Offset
+    @GestureState private var offset: CGFloat = 0
+    @State private var currentIndex: Int = 0
+    
     var body: some View {
         GeometryReader { proxy in
             HStack(spacing: spacing) {
@@ -35,6 +39,16 @@ struct SnapCarousel<Content: View, T: Identifiable>: View {
             }
             // Spacing will be horizontal padding
             .padding(.horizontal, spacing)
+            .offset(x: offset)
+            .gesture(
+                DragGesture()
+                    .updating($offset, body: { value, out, _ in
+                        out = value.translation.width
+                    })
+                    .onEnded { value in
+                        
+                    }
+            )
         }
     }
 }
